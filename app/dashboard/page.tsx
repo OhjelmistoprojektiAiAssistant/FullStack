@@ -1,7 +1,8 @@
 import React from 'react'
-import PageTemplate from '../components/PageTemplate'
+import PageTemplate from '../../components/PageTemplate'
 
 const page = () => {
+
   return (
     <PageTemplate 
       title="Dashboard" 
