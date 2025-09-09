@@ -36,18 +36,7 @@ export default function Hero() {
               height={800}
               priority
           />
-
         </div>
-      </div>
-
-      {/* Features */}
-      <div className="px-8 py-16 text-center">
-        <h2 className="text-2xl font-bold text-gray-900 mb-4">
-          How AI Career Assistant works
-        </h2>
-        <p className="text-gray-600 max-w-2xl mx-auto">
-          Our platform makes job applications simple, fast, and effective.
-        </p>
       </div>
     </section>
     )
