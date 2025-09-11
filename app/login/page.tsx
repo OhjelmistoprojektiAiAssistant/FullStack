@@ -1,16 +1,11 @@
-import React from 'react'
+import { LoginForm } from "@/components/login-form"
 
-const page = () => {
+export default function LoginPage() {
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-8">
-      <div className="max-w-md w-full">
-        <h1 className="text-3xl font-bold text-gray-900 mb-6 text-center">Login</h1>
-        <div className="bg-white rounded-lg shadow-sm p-6">
-          <p className="text-gray-600 text-center">Sign in to your account.</p>
-        </div>
+    <div className="bg-muted flex min-h-svh flex-col items-center justify-center p-6 md:p-10">
+      <div className="w-full max-w-sm md:max-w-3xl">
+        <LoginForm />
       </div>
     </div>
   )
 }
-
-export default page
