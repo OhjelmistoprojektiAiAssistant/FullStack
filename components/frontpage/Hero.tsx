@@ -1,9 +1,11 @@
 'use client';
 import React from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 export default function Hero() {
-    return (
+  const router = useRouter();
+  return (
         <section className="bg-gradient-to-b from-blue-100 to-white">
       {/* Hero */}
       <div className="grid md:grid-cols-2 gap-8 px-8 py-16 items-center">
@@ -20,7 +22,9 @@ export default function Hero() {
             analyzes your strengths and the job description to craft the perfect
             application that gets you noticed.
           </p>
-          <button className="bg-blue-600 hover:bg-blue-700 hover:shadow-xl text-white px-8 py-4 rounded-2xl shadow-lg transition-all duration-300 transform hover:scale-105">
+            <button
+              onClick={() => router.push('/register')}
+              className="bg-blue-600 hover:bg-blue-700 hover:shadow-xl text-white px-8 py-4 rounded-2xl shadow-lg transition-all duration-300 transform hover:scale-105">
             Get started!
           </button>
           
