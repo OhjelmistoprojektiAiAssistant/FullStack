@@ -13,7 +13,8 @@ async function main() {
         update: {},
         create: {
             email: 'user@gmail.com',
-            password: passHash
+            password: passHash,
+            
         },
     });
     console.log('Seeded user:', { id: user.id, email: user.email });
