@@ -1,5 +1,5 @@
 import React from 'react'
-
+import LogoutButton from "../../(auth)/components/logout-button";
 
 const page = () => {
 
@@ -11,6 +11,7 @@ const page = () => {
           <p className="text-gray-600">View your dashboard here.</p>
         </div>
       </div>
+      <LogoutButton />
     </div>
   )
 }

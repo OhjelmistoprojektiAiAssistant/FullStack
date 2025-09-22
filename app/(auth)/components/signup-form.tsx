@@ -5,8 +5,8 @@ import { Input } from "@/app/(public)/components/ui/input";
 import { Label } from "@/app/(public)/components/ui/label";
 import { Button } from "@/app/(public)/components/ui/button";
 import { useRouter } from "next/navigation";
-import { signUp } from "@/app/(auth)/actions";
-import { SignUpSchema } from "@/lib/validations/auth";
+import { postJSON } from "@/lib/api";
+
 
 export default function SignUpForm() {
   const [email, setEmail] = useState("");
@@ -20,34 +20,17 @@ export default function SignUpForm() {
     e.preventDefault();
     setError("");
 
-    const formData = {
-      email,
-      password,
-      confirmPassword,
-    };
-
-    const validation = SignUpSchema.safeParse(formData);
-    if (!validation.success) {
-      const firstError = validation.error.issues[0];
-      setError(firstError.message);
-      return;
-    }
-
-    setIsLoading(true);
+    
     try {
-      // Call the signUp action with the validated data
-      const result = await signUp(validation.data);
-
-      if (result?.error) {
-        setError(result.error);
-      } else {
-        // Success! User is logged in automatically
-        router.push("/dashboard");
+      setIsLoading(true);
+      if (password !== confirmPassword) {
+        setError("Passwords do not match");
+        return;
       }
-    } catch {
-      setError("Failed to create an account");
-    } finally {
-      setIsLoading(false);
+      const response = await postJSON("/api/auth/signup", { email, password, confirmPassword });
+      router.push("/dashboard");
+    } catch (err: any) {
+      setError(err?.error?.message ?? "Sign up failed");
     }
   };
 

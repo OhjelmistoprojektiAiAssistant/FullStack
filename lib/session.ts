@@ -1,49 +1,36 @@
-"server-only"
 
 import { cookies } from "next/headers";
-import z from "zod"
+import { getIronSession, SessionOptions} from "iron-session";
+import { secureHeapUsed } from "crypto";
 
-const sessionSchema = z.object({
-    id: z.string(), // user id is not hashed for simplicity
-    // role may be added later
-})
+export type SessionData = {
+    userId?: string;
+    email?: string;
+};
 
-type UserSession = z.infer<typeof sessionSchema>;
-export async function createUserSession(user: UserSession) {
-    // Create a session for the user
-    const cookieStore = await cookies();
-
-    // set the session cookie
-    cookieStore.set('session', JSON.stringify(user), {
+export const sessionOptions: SessionOptions = {
+    cookieName: "career_ai_session",
+    password: process.env.SESSION_SECRET! as string,
+    cookieOptions: {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
-        expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7), // 7 days
-    });
-}
+        secure: process.env.NODE_ENV === "production",
+        samesite: "strict",
+    },
+};
 
-export async function getUserSession(): Promise<UserSession | null> {
-    const cookiesStore = await cookies();
-    const sessionCookie = cookiesStore.get('session');
+// we use inside route handlers (app/api/...) where you have a Request/Response
+// returns a session bound to the response we return
+export function getRouteSession(request: Request, response: Response) {
+    return getIronSession<SessionData>(request, response, sessionOptions);
+} 
 
-    if (!sessionCookie) return null;
-    try {
-        const parsed = JSON.parse(sessionCookie.value);
-        return sessionSchema.parse(parsed);
-    } catch (error) {
-        return null;
-    }
-}
+// we use inside Server Components (app/...)
+// we dont have response here, so we create a dummy response thath wont be sent
+//but lets iron-session read coookies safely
 
-// Check if user is logged in
-export async function isUserLoggedIn(): Promise<boolean> {
-  const session = await getUserSession();
-  return session !== null;
-}
-
-
-// Delete user session --> log out
-export async function deleteUserSession() {
-  const cookieStore = await cookies();
-  cookieStore.delete("session");
+export async function getServerSession() {
+    const cookieHeader = (await cookies()).toString(); // serialize cookies which means: cookie1=value1; cookie2=value2
+    const req = new Request("http://localhost", { headers: { cookie: cookieHeader } });
+    const res = new Response(); // dummy response
+    return getIronSession<SessionData>(req, res, sessionOptions);
 }

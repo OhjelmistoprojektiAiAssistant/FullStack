@@ -15,16 +15,14 @@ datasource db {
 }
 
 
-
-
 model User {
-  id          String      @id @default(uuid())
-  email       String      @unique
-  password    String
-  profile     Profile?
-  createdAt   DateTime    @default(now())
-  jobs        Job[]
-  drafts      Draft[]
+  id              String      @id @default(uuid())
+  email           String      @unique
+  passwordHash    String
+  profile         Profile?
+  createdAt       DateTime    @default(now())
+  jobs            Job[]
+  drafts          Draft[]
   
 }
 

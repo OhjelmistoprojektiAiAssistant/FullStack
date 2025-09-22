@@ -13,7 +13,7 @@ async function main() {
         update: {},
         create: {
             email: 'user@gmail.com',
-            password: passHash,
+            passwordHash: passHash,
             
         },
     });
