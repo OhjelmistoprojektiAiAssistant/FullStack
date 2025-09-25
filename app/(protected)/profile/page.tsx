@@ -1,4 +1,6 @@
 import React from 'react'
+import { getProfile, updateProfile } from "@/lib/routes/profile"
+
 
 const page = () => {
   return (
