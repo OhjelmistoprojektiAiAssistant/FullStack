@@ -1,5 +1,4 @@
 import React from 'react'
-import { getDrafts } from "@/lib/routes/draft"
 
 const page = () => {
   return (
