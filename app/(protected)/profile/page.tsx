@@ -1,5 +1,4 @@
 import React from 'react'
-import { getProfile, updateProfile } from "@/lib/routes/profile"
 
 import Navbar from '@/app/(public)/components/frontpage/NavBar'
 

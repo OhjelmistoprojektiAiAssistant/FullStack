@@ -1,6 +1,5 @@
+import Navbar from '@/app/(public)/components/frontpage/NavBar';
 import React from 'react'
-import { getDrafts } from "@/lib/routes/draft"
-import Navbar from '@/app/(public)/components/frontpage/NavBar'
 
 const page = () => {
 
