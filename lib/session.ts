@@ -1,12 +1,8 @@
 
 import { cookies } from "next/headers";
 import { getIronSession, SessionOptions} from "iron-session";
-import { secureHeapUsed } from "crypto";
+import { SessionUser } from "./types/session";
 
-export type SessionData = {
-    userId?: string;
-    email?: string;
-};
 
 export const sessionOptions: SessionOptions = {
     cookieName: "career_ai_session",
@@ -21,7 +17,7 @@ export const sessionOptions: SessionOptions = {
 // we use inside route handlers (app/api/...) where you have a Request/Response
 // returns a session bound to the response we return
 export function getRouteSession(request: Request, response: Response) {
-    return getIronSession<SessionData>(request, response, sessionOptions);
+    return getIronSession<SessionUser>(request, response, sessionOptions);
 } 
 
 // we use inside Server Components (app/...)
@@ -32,5 +28,7 @@ export async function getServerSession() {
     const cookieHeader = (await cookies()).toString(); // serialize cookies which means: cookie1=value1; cookie2=value2
     const req = new Request("http://localhost", { headers: { cookie: cookieHeader } });
     const res = new Response(); // dummy response
-    return getIronSession<SessionData>(req, res, sessionOptions);
+    return getIronSession<SessionUser>(req, res, sessionOptions);
 }
+
+

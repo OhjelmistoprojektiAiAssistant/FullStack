@@ -1,9 +1,15 @@
 import React from 'react'
 import LogoutButton from "../../(auth)/components/logout-button";
+import Navbar from '@/app/(public)/components/frontpage/NavBar';
+import RouterComponent from './componets/routerComponent';
+import { getServerSession } from '@/lib/session';
 
-const page = () => {
+
+const page = async () => {
 
   return (
+    <>
+    <Navbar />
     <div className="min-h-screen bg-gray-50 p-8">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-3xl font-bold text-gray-900 mb-6">Dasboard</h1>
@@ -12,7 +18,9 @@ const page = () => {
         </div>
       </div>
       <LogoutButton />
-    </div>
+      <RouterComponent /> 
+      </div>
+    </>
   )
 }
 
