@@ -35,12 +35,85 @@ function calculateCompleteness(profile: any): number {
 }
 
 /**
- * GET /api/profile
- *
- * Returns comprehensive user data including:
- * - User account info (email, passwordHash masked, createdAt)
- * - User statistics (job count, draft count, profile completeness)
- * - Profile data (experience, education, skills, strengths)
+ * @swagger
+ * /api/profile:
+ *   get:
+ *     tags:
+ *       - Profile
+ *     summary: Get comprehensive user profile data
+ *     description: Returns comprehensive user data including account info, user statistics, and profile data
+ *     security:
+ *       - sessionAuth: []
+ *     responses:
+ *       200:
+ *         description: Profile data retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 user:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: string
+ *                       example: "user123"
+ *                     email:
+ *                       type: string
+ *                       format: email
+ *                       example: "user@example.com"
+ *                     passwordHash:
+ *                       type: string
+ *                       example: "[REDACTED]"
+ *                     createdAt:
+ *                       type: string
+ *                       format: date-time
+ *                     memberSince:
+ *                       type: string
+ *                       example: "October 2023"
+ *                 userStats:
+ *                   type: object
+ *                   properties:
+ *                     jobCount:
+ *                       type: integer
+ *                       example: 5
+ *                     draftCount:
+ *                       type: integer
+ *                       example: 3
+ *                     profileCompleteness:
+ *                       type: integer
+ *                       example: 75
+ *                 profile:
+ *                   $ref: '#/components/schemas/Profile'
+ *       401:
+ *         description: Unauthorized - user not authenticated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 authenticated:
+ *                   type: boolean
+ *                   example: false
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 error:
+ *                   type: string
+ *                   example: "Failed to fetch profile data"
  */
 export async function GET(request: Request) {
   try {
@@ -132,10 +205,120 @@ export async function GET(request: Request) {
 }
 
 /**
- * PUT /api/profile
- *
- * Updates user profile data (creates profile if doesn't exist)
- * Only updates the editable profile fields, not user account data
+ * @swagger
+ * /api/profile:
+ *   put:
+ *     tags:
+ *       - Profile
+ *     summary: Update user profile data
+ *     description: Updates user profile data (creates profile if doesn't exist). Only updates the editable profile fields, not user account data.
+ *     security:
+ *       - sessionAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               experience:
+ *                 type: string
+ *                 maxLength: 2000
+ *                 description: Work experience details
+ *                 example: "5 years as a Software Developer at Tech Corp"
+ *               education:
+ *                 type: string
+ *                 maxLength: 2000
+ *                 description: Education background
+ *                 example: "Bachelor's in Computer Science from University"
+ *               skills:
+ *                 type: string
+ *                 maxLength: 500
+ *                 description: Technical and professional skills
+ *                 example: "JavaScript, React, Node.js, Python"
+ *               strengths:
+ *                 type: string
+ *                 maxLength: 1000
+ *                 description: Comma-separated list of strengths
+ *                 example: "Problem-solving, Team collaboration, Communication"
+ *     responses:
+ *       200:
+ *         description: Profile updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     profile:
+ *                       $ref: '#/components/schemas/Profile'
+ *                     message:
+ *                       type: string
+ *                       example: "Profile updated successfully"
+ *       400:
+ *         description: Bad request - validation error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 error:
+ *                   type: object
+ *                   properties:
+ *                     code:
+ *                       type: string
+ *                       example: "VALIDATION_ERROR"
+ *                     message:
+ *                       type: string
+ *                       example: "Invalid profile data"
+ *                     details:
+ *                       type: object
+ *       401:
+ *         description: Unauthorized - user not authenticated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 error:
+ *                   type: object
+ *                   properties:
+ *                     code:
+ *                       type: string
+ *                       example: "UNAUTHORIZED"
+ *                     message:
+ *                       type: string
+ *                       example: "Authentication required"
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 error:
+ *                   type: object
+ *                   properties:
+ *                     code:
+ *                       type: string
+ *                       example: "DATABASE_ERROR"
+ *                     message:
+ *                       type: string
+ *                       example: "Failed to update profile"
  */
 export async function PUT(request: Request) {
   try {
