@@ -52,6 +52,7 @@ model Draft {
   userId      String
   content     String      @db.Text
   createdAt   DateTime    @default(now())
+  name        String 
 
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
