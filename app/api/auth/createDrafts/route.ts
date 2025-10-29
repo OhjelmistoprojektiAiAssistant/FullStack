@@ -18,8 +18,13 @@ import { NextResponse } from "next/server";
  *           schema:
  *             type: object
  *             required:
+ *               - name
  *               - content
  *             properties:
+ *               name:
+ *                 type: string
+ *                 description: Draft name or title
+ *                 example: "Software Engineer Application - TechCorp"
  *               content:
  *                 type: string
  *                 description: Draft content text
@@ -32,7 +37,7 @@ import { NextResponse } from "next/server";
  *             schema:
  *               $ref: '#/components/schemas/Draft'
  *       400:
- *         description: Bad request - content is required
+ *         description: Bad request - name and content are required
  *         content:
  *           application/json:
  *             schema:
@@ -40,7 +45,11 @@ import { NextResponse } from "next/server";
  *               properties:
  *                 error:
  *                   type: string
- *                   example: "Content is required"
+ *                   examples:
+ *                     name_required:
+ *                       value: "Name is required"
+ *                     content_required:
+ *                       value: "Content is required"
  *       401:
  *         description: Unauthorized - user not authenticated
  *         content:
@@ -67,13 +76,18 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    const content = body.content;
+    const { name, content } = body;
+
+    if (!name) {
+        return NextResponse.json({ error: "Name is required" }, { status: 400 });
+    }
+
     if (!content) {
         return NextResponse.json({ error: "Content is required" }, { status: 400 });
     }
 
     const draft = await prisma.draft.create({
-        data: { userId: session.userId, content },
+        data: { userId: session.userId, name, content },
     });
     return NextResponse.json(draft, { status: 201 });
 }

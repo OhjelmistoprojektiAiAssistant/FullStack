@@ -5,6 +5,7 @@ import { Trash2, Edit, Calendar } from "lucide-react";
 
 interface Draft {
     id: string;
+    name: string;
     content: string;
     createdAt: string;
 }
@@ -59,9 +60,12 @@ const DraftCard: React.FC<DraftCardProps> = ({ draft, onDelete }) => {
     return (
         <div className="bg-white rounded-lg shadow-sm border p-6 hover:shadow-md transition-shadow">
             <div className="flex justify-between items-start mb-4">
-                <div className="flex items-center text-sm text-gray-500">
-                    <Calendar className="w-4 h-4 mr-1" />
-                    {formatDate(draft.createdAt)}
+                <div className="flex-1">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">{draft.name}</h3>
+                    <div className="flex items-center text-sm text-gray-500">
+                        <Calendar className="w-4 h-4 mr-1" />
+                        {formatDate(draft.createdAt)}
+                    </div>
                 </div>
                 <div className="flex space-x-2">
                     <Button

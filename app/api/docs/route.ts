@@ -117,6 +117,10 @@ const options = {
                             type: 'string',
                             description: 'Reference to the user who created the draft',
                         },
+                        name: {
+                            type: 'string',
+                            description: 'Draft name or title',
+                        },
                         content: {
                             type: 'string',
                             description: 'Draft content text',

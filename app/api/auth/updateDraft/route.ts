@@ -19,12 +19,15 @@ import { NextResponse } from "next/server";
  *             type: object
  *             required:
  *               - id
- *               - content
  *             properties:
  *               id:
  *                 type: string
  *                 description: Draft ID to update
  *                 example: "123e4567-e89b-12d3-a456-426614174000"
+ *               name:
+ *                 type: string
+ *                 description: Updated draft name
+ *                 example: "Senior Developer Application - Updated"
  *               content:
  *                 type: string
  *                 description: Updated draft content
@@ -37,7 +40,7 @@ import { NextResponse } from "next/server";
  *             schema:
  *               $ref: '#/components/schemas/Draft'
  *       400:
- *         description: Bad request - draft ID and content are required
+ *         description: Bad request - draft ID is required, and at least name or content must be provided
  *         content:
  *           application/json:
  *             schema:
@@ -45,7 +48,7 @@ import { NextResponse } from "next/server";
  *               properties:
  *                 error:
  *                   type: string
- *                   example: "Draft id and content are required"
+ *                   example: "At least name or content must be provided"
  *       401:
  *         description: Unauthorized - user not authenticated
  *         content:
@@ -83,10 +86,14 @@ export async function PUT(request: Request) {
 
     const body = await request.json();
     const draftId = body.id;
-    const content = body.content;
+    const { name, content } = body;
 
-    if (!draftId || !content) {
-        return NextResponse.json({ error: "Draft id and content are required" }, { status: 400 });
+    if (!draftId) {
+        return NextResponse.json({ error: "Draft id is required" }, { status: 400 });
+    }
+
+    if (!name && !content) {
+        return NextResponse.json({ error: "At least name or content must be provided" }, { status: 400 });
     }
 
     // Ensure the draft belongs to the user
@@ -95,9 +102,14 @@ export async function PUT(request: Request) {
         return NextResponse.json({ error: "Draft not found or unauthorized" }, { status: 404 });
     }
 
+    // Build update data object with only provided fields
+    const updateData: { name?: string; content?: string } = {};
+    if (name) updateData.name = name;
+    if (content) updateData.content = content;
+
     const updated = await prisma.draft.update({
         where: { id: draftId },
-        data: { content },
+        data: updateData,
     });
     return NextResponse.json(updated, { status: 200 });
 }

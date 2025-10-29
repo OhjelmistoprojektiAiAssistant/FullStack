@@ -5,12 +5,18 @@ import { Save, ArrowLeft, FileText } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 const DraftForm: React.FC = () => {
+    const [name, setName] = useState("");
     const [content, setContent] = useState("");
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const router = useRouter();
 
     const handleSave = async () => {
+        if (!name.trim()) {
+            setError("Please enter a name for your draft");
+            return;
+        }
+
         if (!content.trim()) {
             setError("Please enter some content for your draft");
             return;
@@ -26,6 +32,7 @@ const DraftForm: React.FC = () => {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
+                    name: name.trim(),
                     content: content.trim(),
                 }),
             });
@@ -47,10 +54,15 @@ const DraftForm: React.FC = () => {
     };
 
     const handleCancel = () => {
-        if (content.trim() && !confirm("Are you sure you want to leave? Your draft will not be saved.")) {
+        if ((name.trim() || content.trim()) && !confirm("Are you sure you want to leave? Your draft will not be saved.")) {
             return;
         }
         router.push("/drafts");
+    };
+
+    const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setName(e.target.value);
+        if (error) setError(null); // Clear error when user starts typing
     };
 
     const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -74,6 +86,22 @@ const DraftForm: React.FC = () => {
                     </div>
                 </div>
 
+                {/* Draft Name Input */}
+                <div className="mb-4">
+                    <label htmlFor="draft-name" className="block text-sm font-medium text-gray-700 mb-2">
+                        Draft Name
+                    </label>
+                    <input
+                        id="draft-name"
+                        type="text"
+                        value={name}
+                        onChange={handleNameChange}
+                        placeholder="e.g., Software Engineer Application - TechCorp"
+                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700"
+                        disabled={saving}
+                    />
+                </div>
+
                 {/* Character Counter */}
                 <div className="text-right text-sm text-gray-500 mb-2">
                     {content.length} characters
@@ -81,7 +109,11 @@ const DraftForm: React.FC = () => {
 
                 {/* Content Textarea */}
                 <div className="mb-4">
+                    <label htmlFor="draft-content" className="block text-sm font-medium text-gray-700 mb-2">
+                        Draft Content
+                    </label>
                     <textarea
+                        id="draft-content"
                         value={content}
                         onChange={handleContentChange}
                         placeholder="Start writing your job application content here... 

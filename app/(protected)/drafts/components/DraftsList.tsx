@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 
 interface Draft {
     id: string;
+    name: string;
     content: string;
     createdAt: string;
 }
