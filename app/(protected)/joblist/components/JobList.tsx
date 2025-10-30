@@ -1,8 +1,9 @@
 import React from "react";
 import JobCard from "./JobCard";
+import { JobListDto } from "./dto/jobListDto";
 
 interface JobListProps {
-    jobs: any[];
+    jobs: JobListDto[];
     bookmarkedJobs: string[];
     onToggleBookmark: (id: string) => void;
 }

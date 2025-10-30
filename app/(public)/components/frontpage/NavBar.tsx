@@ -50,6 +50,12 @@ export default function Navbar() {
              
 
               <button
+                onClick={() => router.push("/joblist")}
+                className="text-gray-600 hover:text-blue-950 px-4 py-2 rounded-xl transition-colors duration-200"
+              >
+                Home
+              </button>
+              <button
                 onClick={() => router.push("/dashboard")}
                 className="text-gray-600 hover:text-blue-950 px-4 py-2 rounded-xl transition-colors duration-200"
               >

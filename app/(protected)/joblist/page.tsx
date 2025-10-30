@@ -3,27 +3,33 @@ import Navbar from '@/app/(public)/components/frontpage/NavBar';
 import React, { useEffect, useState } from "react";
 import JobList from "././components/JobList";
 import JobFilter from "././components/JobFilter";
-
+import { JobListDto } from './components/dto/jobListDto';
+    
 export default function JobPage() {
-    const [jobs, setJobs] = useState([]);
-    const [filteredJobs, setFilteredJobs] = useState([]);
+    const [jobs, setJobs] = useState<JobListDto[]>([]);
+    const [filteredJobs, setFilteredJobs] = useState<JobListDto[]>([]); 
     const [bookmarkedJobs, setBookmarkedJobs] = useState<string[]>([]);
     const [filters, setFilters] = useState({ search: "" });
 
+  
     // Fetch jobs from API
     useEffect(() => {
         const fetchJobs = async () => {
             try {
-                const res = await fetch("https://api.example.com/jobs"); //VAIHDA OIKEAN API KANSSA
-                const data = await res.json();
-                setJobs(data);
-                setFilteredJobs(data);
+                const response = await fetch("/api/jobs");
+                const data = await response.json();
+                if (!data.success) {
+                    throw new Error(data.error || "Failed to fetch jobs");
+                }
+
+                setJobs(data.jobs);
+                setFilteredJobs(data.jobs);
             } catch (err) {
                 console.error("Failed to fetch jobs:", err);
             }
         };
         fetchJobs();
-    }, []);
+    }, []); //when addinng filters add [filters] here for auto update
 
     // Handle filtering
     useEffect(() => {
