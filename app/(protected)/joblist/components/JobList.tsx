@@ -9,10 +9,16 @@ interface JobListProps {
 }
 
 const JobList: React.FC<JobListProps> = ({ jobs, bookmarkedJobs, onToggleBookmark }) => {
-    if (jobs.length === 0) return <p>No jobs found.</p>;
+    if (jobs.length === 0) {
+        return (
+            <div className="text-center py-8 text-gray-500">
+                No jobs found matching your criteria.
+            </div>
+        );
+    }
 
     return (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="border rounded-lg divide-y">
             {jobs.map((job) => (
                 <JobCard
                     key={job.id}

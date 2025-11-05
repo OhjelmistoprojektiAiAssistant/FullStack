@@ -3,7 +3,7 @@ import { Bookmark, BookmarkCheck } from "lucide-react";
 
 interface BookmarkButtonProps {
     isBookmarked: boolean;
-    onClick: () => void;
+    onClick: (e: React.MouseEvent) => void;
 }
 
 const BookmarkButton: React.FC<BookmarkButtonProps> = ({ isBookmarked, onClick }) => {

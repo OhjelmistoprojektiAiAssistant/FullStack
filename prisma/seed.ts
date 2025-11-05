@@ -12,7 +12,7 @@ async function main() {
         where: { email: 'user@gmail.com' },
         update: {},
         create: {
-            email: 'user@gmail.com',
+            email: '',
             passwordHash: passHash,
             
         },
