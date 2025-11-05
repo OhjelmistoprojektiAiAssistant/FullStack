@@ -1,14 +1,13 @@
-"use client"
+"use client";
 
-import Navbar from '@/app/(public)/components/frontpage/NavBar'
-import { Button } from '@/app/(public)/components/ui/button';
-import { Copy } from 'lucide-react';
-import Head from 'next/head';
-import Link from 'next/link';
-import React, { useState } from 'react'
+import Navbar from "@/app/(public)/components/frontpage/NavBar";
+import { Button } from "@/app/(public)/components/ui/button";
+import { Copy } from "lucide-react";
+import Head from "next/head";
+import Link from "next/link";
+import React, { useState } from "react";
 
 const page = () => {
-
   const [jobDescription, setJobDescription] = useState("");
   const [toneOption, setToneOption] = useState("");
   const [lengthOption, setLengthOption] = useState("");
@@ -21,10 +20,10 @@ const page = () => {
     e.preventDefault();
     // Handle form submission logic here
     // send api request to create a new application
-    const response = await fetch('/api/newApplication', {
-      method: 'POST',
+    const response = await fetch("/api/newApplication", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         jobDescription,
@@ -32,24 +31,98 @@ const page = () => {
         lengthOption,
       }),
     });
-  }
 
+    const data = await response.json();
+    if (response.ok) {
+      console.log("Application created successfully:", data);
+      setOutput(data.coverLetter);
+    } else {
+      console.error("Error creating application:", data);
+    }
+  };
 
-  function handleCopy(  ): void {
-    throw new Error('Function not implemented.');
+  function handleCopy(): void {
+    throw new Error("Function not implemented.");
   }
 
   function handleReset(): void {
-    throw new Error('Function not implemented.');
+    throw new Error("Function not implemented.");
   }
 
   return (
     <>
       <Navbar />
 
-      <main className="min-h-screen bg-gradient-to-b from-white via-stone-50 to-stone-100 px-0 relative overflow-hidden">
+      <main className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 px-0 relative overflow-hidden">
+        {/* AI-inspired animated background */}
+        <div className="absolute inset-0 overflow-hidden">
+          {/* Grid pattern */}
+          <div className="absolute inset-0 bg-[linear-gradient(rgba(59,130,246,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.03)_1px,transparent_1px)] bg-[size:44px_44px]"></div>
+
+          {/* Floating orbs */}
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute top-3/4 right-1/4 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+          <div className="absolute top-1/2 left-3/4 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl animate-pulse delay-2000"></div>
+
+          {/* Circuit-like lines */}
+          <svg
+            className="absolute inset-0 w-full h-full opacity-10"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <defs>
+              <pattern
+                id="circuit"
+                x="0"
+                y="0"
+                width="100"
+                height="100"
+                patternUnits="userSpaceOnUse"
+              >
+                <path
+                  d="M0 50 L20 50 L20 20 L50 20 L50 0"
+                  stroke="currentColor"
+                  strokeWidth="1"
+                  fill="none"
+                  className="text-blue-400"
+                />
+                <path
+                  d="M50 100 L50 80 L80 80 L80 50 L100 50"
+                  stroke="currentColor"
+                  strokeWidth="1"
+                  fill="none"
+                  className="text-indigo-400"
+                />
+                <circle
+                  cx="20"
+                  cy="50"
+                  r="2"
+                  fill="currentColor"
+                  className="text-cyan-400"
+                />
+                <circle
+                  cx="50"
+                  cy="20"
+                  r="2"
+                  fill="currentColor"
+                  className="text-blue-400"
+                />
+                <circle
+                  cx="80"
+                  cy="80"
+                  r="2"
+                  fill="currentColor"
+                  className="text-indigo-400"
+                />
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#circuit)" />
+          </svg>
+
+          {/* Gradient overlay for depth */}
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-900/50 via-transparent to-slate-900/30"></div>
+        </div>
         <section className="flex flex-col items-center justify-center text-center py-12 px-4 z-10 relative">
-          <div className="w-full max-w-6xl bg-white shadow-xl border rounded-xl p-10 space-y-10">
+          <div className="w-full max-w-6xl bg-white/95 backdrop-blur-sm shadow-2xl border border-white/20 rounded-2xl p-10 space-y-10 relative z-10">
             <div className="text-center">
               <h1 className="text-4xl font-extrabold tracking-tight text-stone-800 md:text-4xl">
                 {" "}
@@ -75,9 +148,9 @@ const page = () => {
                   value={jobDescription}
                   onChange={(e) => setJobDescription(e.target.value)}
                   placeholder="Paste the job description here"
-                  className="w-full h-[180px] text-base p-4 rounded-lg border border-stone-300 resize-none"
+                  className="w-full h-[180px] text-base p-4 rounded-lg border border-stone-300 resize-none bg-white" 
                 />
-                <p className="mt-2 text-sm text-stone-500 mt-2">
+                <p className="mt-2 text-sm text-stone-400">
                   Please provide a detailed description of the job you are
                   applying for.
                 </p>
@@ -167,7 +240,7 @@ const page = () => {
             </form>
           </div>
         </section>
-        <section className="bg-white  py-20 px-4">
+        <section className="bg-white/90 backdrop-blur-sm py-20 px-4 relative z-10">
           <h3 className="text-2xl font-semibold text-center text-stone-700 mb-12">
             What people are saying
           </h3>
@@ -233,7 +306,7 @@ const page = () => {
         </section>
         <section
           id="pricing"
-          className="bg-white border-t py-24 px-4 text-center"
+          className="bg-white/90 backdrop-blur-sm border-t border-white/20 py-24 px-4 text-center relative z-10"
         >
           <div id="pricing" className="text-center">
             <h2 className="text-2xl font-bold mb-4 text-stone-800">
@@ -269,6 +342,6 @@ const page = () => {
       </main>
     </>
   );
-}
+};
 
-export default page
+export default page;
