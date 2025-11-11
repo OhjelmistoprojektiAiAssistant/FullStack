@@ -12,12 +12,22 @@ interface JobCardProps {
 
 const JobCard: React.FC<JobCardProps> = ({ job, isBookmarked, onToggleBookmark }) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [fullDescription, setFullDescription] = useState<string | null>(null);
+  const [loadingDesc, setLoadingDesc] = useState(false);
+
+  const handleExpand = async () => {
+    setIsExpanded(prev => !prev);
+    if (!isExpanded && !fullDescription) {
+      setFullDescription(job.description);
+    }
+
+  };
 
   return (
     <div className="border-b last:border-b-0">
       <div
         className="p-4 flex items-center justify-between hover:bg-gray-50 cursor-pointer"
-        onClick={() => setIsExpanded(!isExpanded)}
+        onClick={handleExpand}
       >
         <div className="flex-1 min-w-0 pr-4">
           <div className="flex items-center justify-between">
@@ -52,7 +62,7 @@ const JobCard: React.FC<JobCardProps> = ({ job, isBookmarked, onToggleBookmark }
         <div className="p-4 bg-gray-50 border-t">
           <div className="prose max-w-none">
             <p className="text-gray-700 whitespace-pre-line">
-              {job.description}
+              {loadingDesc ? "Loading full description..." : (fullDescription || job.description)}
             </p>
             <div className="mt-4">
               <h4 className="font-medium mb-2">Job Details:</h4>

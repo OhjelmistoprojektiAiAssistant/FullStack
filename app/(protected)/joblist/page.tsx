@@ -1,6 +1,6 @@
 "use client";
 import Navbar from '@/app/(public)/components/frontpage/NavBar';
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import JobList from "./components/JobList";
 import JobFilter from "./components/JobFilter";
 import { JobListDto } from "./components/dto/jobListDto";
@@ -14,53 +14,46 @@ export default function JobPage() {
     const [filters, setFilters] = useState({
         title: "",
         location: "",
-        minSalary: 0,
     });
+    const [showBookmarkedOnly, setShowBookmarkedOnly] = useState(false);
 
-    // Fetch jobs from API
-    useEffect(() => {
-        const fetchJobs = async () => {
-            setLoading(true);
-            try {
-                const res = await fetch("/api/jobs");
-                const data = await res.json();
+    const fetchJobs = useCallback(async (searchFilters?: { title?: string; location?: string }) => {
+        setLoading(true);
+        try {
+            const params = new URLSearchParams();
+            // results_per_page and content-type are useful defaults
+            params.set("results_per_page", "50");
+            params.set("content-type", "application/json");
 
-                if (!data.success) {
-                    throw new Error(data.error || 'Failed to fetch jobs');
-                }
-
-                // Use data.jobs instead of data directly
-                setJobs(data.jobs || []);
-                setFilteredJobs(data.jobs || []);
-                setError(null);
-            } catch (err) {
-                console.error("Failed to fetch jobs:", err);
-                setError(err instanceof Error ? err.message : 'Failed to fetch jobs');
-                setJobs([]);
-                setFilteredJobs([]);
-            } finally {
-                setLoading(false);
+            if (searchFilters) {
+                if (searchFilters.title) params.set("what", searchFilters.title);
+                if (searchFilters.location) params.set("where", searchFilters.location);
             }
-        };
-        fetchJobs();
+
+            const res = await fetch(`/api/jobs?${params.toString()}`);
+            const data = await res.json();
+
+            if (!data.success) {
+                throw new Error(data.error || 'Failed to fetch jobs');
+            }
+
+            setJobs(data.jobs || []);
+            setFilteredJobs(data.jobs || []);
+            setError(null);
+        } catch (err) {
+            console.error("Failed to fetch jobs:", err);
+            setError(err instanceof Error ? err.message : 'Failed to fetch jobs');
+            setJobs([]);
+            setFilteredJobs([]);
+        } finally {
+            setLoading(false);
+        }
     }, []);
 
-    // Handle filtering
+    // initial load
     useEffect(() => {
-        if (!jobs.length) return;
-
-        const filtered = jobs.filter((job) => {
-            const titleMatch = job.title.toLowerCase().includes(filters.title.toLowerCase());
-            const locationMatch = job.location.toLowerCase().includes(filters.location.toLowerCase());
-            const salaryMatch = !filters.minSalary || (
-                job.salaryRange &&
-                parseInt(job.salaryRange.replace(/[^0-9]/g, '')) >= filters.minSalary
-            );
-
-            return titleMatch && locationMatch && salaryMatch;
-        });
-        setFilteredJobs(filtered);
-    }, [filters, jobs]);
+        fetchJobs();
+    }, [fetchJobs]);
 
     // Bookmark handling
     const toggleBookmark = (id: string) => {
@@ -76,7 +69,22 @@ export default function JobPage() {
                 <div className="max-w-5xl mx-auto">
                     <div className="bg-white rounded-lg shadow-sm p-6">
                         <h1 className="text-2xl font-bold mb-6">Job Listings</h1>
-                        <JobFilter filters={filters} setFilters={setFilters} />
+                        <JobFilter filters={filters} onSearch={(vals) => {
+                            // update local filters and fetch from API (title/location only)
+                            setFilters({ title: vals.title, location: vals.location });
+                            fetchJobs({ title: vals.title || undefined, location: vals.location || undefined });
+                        }} />
+                        <div className="mb-4 flex items-center gap-2">
+                            <input
+                                type="checkbox"
+                                id="showBookmarked"
+                                checked={showBookmarkedOnly}
+                                onChange={e => setShowBookmarkedOnly(e.target.checked)}
+                            />
+                            <label htmlFor="showBookmarked" className="text-sm text-gray-700">
+                                Show only bookmarked jobs
+                            </label>
+                        </div>
                         {loading ? (
                             <div className="text-center py-8 text-gray-500">
                                 Loading jobs...
@@ -87,7 +95,9 @@ export default function JobPage() {
                             </div>
                         ) : (
                             <JobList
-                                jobs={filteredJobs}
+                                jobs={showBookmarkedOnly
+                                    ? filteredJobs.filter(job => bookmarkedJobs.includes(job.id))
+                                    : filteredJobs}
                                 bookmarkedJobs={bookmarkedJobs}
                                 onToggleBookmark={toggleBookmark}
                             />
