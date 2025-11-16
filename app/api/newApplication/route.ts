@@ -4,10 +4,108 @@ import { NextResponse } from "next/server";
 import { getRouteSession } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
 
-
-
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
+/**
+ * @swagger
+ * /api/newApplication:
+ *   post:
+ *     summary: Generate AI-powered job application
+ *     description: Generate a personalized job application using OpenAI based on user profile and job description
+ *     tags: [AI Applications]
+ *     security:
+ *       - sessionAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - jobDescription
+ *             properties:
+ *               jobDescription:
+ *                 type: string
+ *                 description: The job posting description to generate application for
+ *                 example: "We are looking for a Senior Software Engineer with 5+ years of experience in React and Node.js..."
+ *               length:
+ *                 type: string
+ *                 enum: [short, medium, long]
+ *                 description: Desired length of the generated application
+ *                 default: short
+ *                 example: "medium"
+ *               tone:
+ *                 type: string
+ *                 enum: [professional, friendly, enthusiastic]
+ *                 description: Tone of voice for the application
+ *                 default: professional
+ *                 example: "enthusiastic"
+ *     responses:
+ *       200:
+ *         description: Application generated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 generatedText:
+ *                   type: string
+ *                   description: The AI-generated job application text
+ *                 draft:
+ *                   $ref: '#/components/schemas/Draft'
+ *       400:
+ *         description: Bad request - job description is required
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 error:
+ *                   type: object
+ *                   properties:
+ *                     code:
+ *                       type: string
+ *                       example: "JOB_DESCRIPTION_REQUIRED"
+ *                     message:
+ *                       type: string
+ *                       example: "Job description is required"
+ *       401:
+ *         description: Unauthorized - user not authenticated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 authenticated:
+ *                   type: boolean
+ *                   example: false
+ *       500:
+ *         description: Internal server error or OpenAI API issues
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 error:
+ *                   type: object
+ *                   properties:
+ *                     code:
+ *                       type: string
+ *                       examples:
+ *                         openai_key_missing:
+ *                           value: "OPENAI_KEY_NOT_SET"
+ *                         openai_error:
+ *                           value: "OPENAI_API_ERROR"
+ */
 export async function POST(request: Request) {
   // return error if openAI key is not set
   if (!process.env.OPENAI_API_KEY) {

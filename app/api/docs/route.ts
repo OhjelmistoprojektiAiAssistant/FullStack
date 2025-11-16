@@ -34,6 +34,14 @@ const options = {
                 name: 'Drafts',
                 description: 'Job application draft management endpoints',
             },
+            {
+                name: 'Jobs',
+                description: 'Job search and listing endpoints using Adzuna API',
+            },
+            {
+                name: 'AI Applications',
+                description: 'AI-powered job application generation using OpenAI',
+            },
         ],
         components: {
             securitySchemes: {
