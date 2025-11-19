@@ -14,7 +14,9 @@ const page = () => {
               View and manage your saved application drafts. Create new drafts with AI assistance.
             </p>
           </div>
-          <DraftsList />
+          <div className="bg-white rounded-lg shadow-sm p-6">
+            <DraftsList />
+          </div>
         </div>
       </div>
     </>

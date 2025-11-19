@@ -3,6 +3,7 @@ import Navbar from '@/app/(public)/components/frontpage/NavBar';
 import React, { useEffect, useState, useCallback } from "react";
 import JobList from "./components/JobList";
 import JobFilter from "./components/JobFilter";
+import LoadingSpinner from "@/app/(public)/components/ui/LoadingSpinner";
 import { JobListDto } from "./components/dto/jobListDto";
 
 export default function JobPage() {
@@ -68,7 +69,8 @@ export default function JobPage() {
             <div className="min-h-screen bg-gray-50 p-8">
                 <div className="max-w-5xl mx-auto">
                     <div className="bg-white rounded-lg shadow-sm p-6">
-                        <h1 className="text-2xl font-bold mb-6">Job Listings</h1>
+                        <h1 className="text-3xl font-bold text-gray-900 mb-2">Job Listings</h1>
+                        <p className="text-gray-600 mb-6">Browse jobs and use filters to refine results.</p>
                         <JobFilter filters={filters} onSearch={(vals) => {
                             // update local filters and fetch from API (title/location only)
                             setFilters({ title: vals.title, location: vals.location });
@@ -86,17 +88,13 @@ export default function JobPage() {
                             </label>
                         </div>
                         {loading ? (
-                            <div className="text-center py-8 text-gray-500">
-                                Loading jobs...
-                            </div>
+                            <LoadingSpinner />
                         ) : error ? (
-                            <div className="text-center py-8 text-red-500">
-                                {error}
-                            </div>
+                            <div className="text-center py-8 text-red-500">{error}</div>
                         ) : (
                             <JobList
                                 jobs={showBookmarkedOnly
-                                    ? filteredJobs.filter(job => bookmarkedJobs.includes(job.id))
+                                    ? filteredJobs.filter((job) => bookmarkedJobs.includes(job.id))
                                     : filteredJobs}
                                 bookmarkedJobs={bookmarkedJobs}
                                 onToggleBookmark={toggleBookmark}
