@@ -37,16 +37,21 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
     };
 
     return (
-        <form onSubmit={onSubmit} className="mt-8 space-y-8">
+        <form onSubmit={onSubmit} className="space-y-8">
             <PersonalInfo formData={formData} handleChange={handleChange} />
             <Strengths
                 selectedStrengths={selectedStrengths}
                 handleStrengthToggle={handleStrengthToggle}
             />
             <Achievements formData={formData} handleChange={handleChange} />
-            <div className="mt-8 flex justify-end">
-                <Button type="submit" size="lg">
-                    Save Profile
+
+            <div className="flex justify-center pt-6">
+                <Button
+                    type="submit"
+                    size="lg"
+                    className="bg-stone-900 text-white hover:bg-black px-8 py-3 rounded-lg text-base font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
+                >
+                    Save Profile & Continue
                 </Button>
             </div>
         </form>

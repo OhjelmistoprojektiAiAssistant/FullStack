@@ -6,24 +6,43 @@ interface ProfileHeaderProps {
 }
 
 const ProfileHeader: React.FC<ProfileHeaderProps> = ({ userInfo, stats }) => (
-    <div className="pb-5 border-b border-gray-200">
-        <h1 className="text-3xl font-bold text-gray-900">Your Profile</h1>
-        <p className="mt-2 text-sm text-gray-500">
-            Update your profile to help our AI generate better job applications.
-        </p>
+    <div className="pb-8 border-b border-stone-200">
+        <div className="text-center mb-6">
+            <h2 className="text-2xl font-bold text-stone-800">Profile Overview</h2>
+            <p className="mt-2 text-stone-600">
+                Update your profile to help our AI generate better job applications.
+            </p>
+        </div>
+
         {userInfo.email && (
-            <div className="mt-3 text-sm text-gray-700">
-                <p>
-                    <strong>Email:</strong> {userInfo.email}
-                </p>
-                <p>
-                    <strong>Member since:</strong> {userInfo.memberSince}
-                </p>
+            <div className="bg-stone-50 rounded-xl p-6 space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="bg-white rounded-lg p-4 shadow-sm">
+                        <h4 className="font-medium text-stone-800 mb-1">Email Address</h4>
+                        <p className="text-stone-600">{userInfo.email}</p>
+                    </div>
+                    <div className="bg-white rounded-lg p-4 shadow-sm">
+                        <h4 className="font-medium text-stone-800 mb-1">Member Since</h4>
+                        <p className="text-stone-600">{userInfo.memberSince}</p>
+                    </div>
+                </div>
+
                 {stats.profileCompleteness !== undefined && (
-                    <p>
-                        <strong>Profile completeness:</strong>{" "}
-                        {stats.profileCompleteness}% ✅
-                    </p>
+                    <div className="bg-white rounded-lg p-4 shadow-sm">
+                        <div className="flex items-center justify-between mb-2">
+                            <h4 className="font-medium text-stone-800">Profile Completeness</h4>
+                            <span className="text-lg font-bold text-stone-800">{stats.profileCompleteness}%</span>
+                        </div>
+                        <div className="w-full bg-stone-200 rounded-full h-3">
+                            <div
+                                className="bg-gradient-to-r from-blue-500 to-indigo-600 h-3 rounded-full transition-all duration-300"
+                                style={{ width: `${stats.profileCompleteness}%` }}
+                            ></div>
+                        </div>
+                        <p className="text-sm text-stone-600 mt-2">
+                            {stats.profileCompleteness === 100 ? "Perfect! Your profile is complete ✅" : "Complete your profile for better AI recommendations"}
+                        </p>
+                    </div>
                 )}
             </div>
         )}

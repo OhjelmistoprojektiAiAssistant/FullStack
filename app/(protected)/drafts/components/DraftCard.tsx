@@ -101,6 +101,12 @@ const DraftCard: React.FC<DraftCardProps> = ({ draft, onDelete }) => {
                         Read more
                     </button>
                 )}
+                
+                {/* Character Counter */}
+                <div className="flex items-center text-sm text-gray-500 mt-3 pt-3 border-t border-gray-100">
+                    <span className="font-medium">{draft.content.length.toLocaleString()}</span>
+                    <span className="ml-1">characters</span>
+                </div>
             </div>
         </div>
     );
