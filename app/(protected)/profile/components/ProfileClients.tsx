@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import ProfileHeader from "./ProfileHeader";
 import ProfileForm from "./ProfileForm";
+import LoadingSpinner from "../../../(public)/components/ui/LoadingSpinner";
 
 const ProfileClients = () => {
     const [formData, setFormData] = useState({
@@ -105,7 +106,12 @@ const ProfileClients = () => {
         }
     };
 
-    if (loading) return <p>Loading your profile...</p>;
+    if (loading) return (
+        <div className="text-center">
+            <LoadingSpinner size={48} />
+            <p className="text-gray-600 mt-4">Loading your profile...</p>
+        </div>
+    );
 
     return (
         <>

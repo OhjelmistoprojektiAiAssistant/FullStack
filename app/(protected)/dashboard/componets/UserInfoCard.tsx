@@ -1,10 +1,16 @@
 //profile/components/UserInfoCard
 
 import { UserInfoCardProps } from "@/lib/types/profile";
+import LoadingSpinner from "../../../(public)/components/ui/LoadingSpinner";
 
 export default function UserInfoCard({ user }: UserInfoCardProps) {
   if (!user) {
-    return <div>Loading user information...</div>;
+    return (
+      <div className="bg-white rounded-lg shadow p-6 text-center">
+        <LoadingSpinner size={40} />
+        <p className="text-gray-600 mt-4">Loading user information...</p>
+      </div>
+    );
   }
 
   return (

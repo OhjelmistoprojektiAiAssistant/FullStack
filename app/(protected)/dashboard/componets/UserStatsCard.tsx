@@ -1,10 +1,16 @@
 // profile/components/userStatsCard
 
 import { UserStatsCardProps } from "@/lib/types/profile";
+import LoadingSpinner from "../../../(public)/components/ui/LoadingSpinner";
 
 export default function UserStatsCard({ stats }: UserStatsCardProps) {
   if (!stats) {
-    return <div>Loading user statistics...</div>;
+    return (
+      <div className="bg-white rounded-lg shadow p-6 text-center">
+        <LoadingSpinner size={40} />
+        <p className="text-gray-600 mt-4">Loading user statistics...</p>
+      </div>
+    );
   }
 
   return (

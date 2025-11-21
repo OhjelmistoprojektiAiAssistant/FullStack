@@ -4,6 +4,7 @@ import DraftCard from "./DraftCard";
 import { Button } from "../../../(public)/components/ui/button";
 import { Plus, RefreshCw } from "lucide-react";
 import { useRouter } from "next/navigation";
+import LoadingSpinner from "../../../(public)/components/ui/LoadingSpinner";
 
 interface Draft {
     id: string;
@@ -54,10 +55,8 @@ const DraftsList: React.FC = () => {
     if (loading) {
         return (
             <div className="bg-white rounded-lg shadow-sm p-6">
-                <div className="flex items-center justify-center py-8">
-                    <RefreshCw className="w-6 h-6 animate-spin mr-2" />
-                    <span className="text-gray-600">Loading your drafts...</span>
-                </div>
+                <LoadingSpinner size={48} />
+                <p className="text-center text-gray-600 mt-4">Loading your drafts...</p>
             </div>
         );
     }

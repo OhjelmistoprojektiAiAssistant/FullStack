@@ -12,6 +12,7 @@ import {
 import UserStatsCard from "./UserStatsCard";
 import ProfileEditCard from "./ProfileEditCard";
 import { useRouter } from "next/navigation";
+import LoadingSpinner from "../../../(public)/components/ui/LoadingSpinner";
 
 export default function ProfileClient() {
   const [profileData, setProfileData] = useState<{
@@ -79,7 +80,10 @@ export default function ProfileClient() {
       )}
 
       {isLoading ? (
-        <div>Loading...</div>
+        <div className="text-center">
+          <LoadingSpinner size={48} />
+          <p className="text-gray-600 mt-4">Loading your dashboard...</p>
+        </div>
       ) : profileData ? (
         <>
           <UserInfoCard user={profileData.user} />

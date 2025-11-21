@@ -105,8 +105,9 @@ export default function JobPage() {
                             </div>
 
                             {loading ? (
-                                <div className="text-center py-8 text-gray-500">
-                                    Loading jobs...
+                                <div className="text-center py-8">
+                                    <LoadingSpinner size={48} />
+                                    <p className="text-gray-600 mt-4">Loading jobs...</p>
                                 </div>
                             ) : error ? (
                                 <div className="text-center py-8 text-red-500">{error}</div>

@@ -1,6 +1,7 @@
 "use client";
 import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
+import LoadingSpinner from '../(public)/components/ui/LoadingSpinner';
 
 // Dynamically import SwaggerUI to avoid SSR issues
 const SwaggerUI = dynamic(() => import('swagger-ui-react'), { ssr: false });
@@ -33,8 +34,8 @@ export default function DocsPage() {
         return (
             <div className="min-h-screen bg-gray-50 flex items-center justify-center">
                 <div className="text-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-                    <p className="text-gray-600">Loading API Documentation...</p>
+                    <LoadingSpinner size={48} />
+                    <p className="text-gray-600 mt-4">Loading API Documentation...</p>
                 </div>
             </div>
         );
