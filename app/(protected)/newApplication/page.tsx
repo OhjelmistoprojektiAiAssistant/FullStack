@@ -240,70 +240,7 @@ const page = () => {
             </form>
           </div>
         </section>
-        <section className="bg-white/90 backdrop-blur-sm py-20 px-4 relative z-10">
-          <h3 className="text-2xl font-semibold text-center text-stone-700 mb-12">
-            What people are saying
-          </h3>
-          <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-            {[
-              {
-                quote:
-                  "I had tailored letters out in minutes. Game-changer! ✨",
-                name: "Bob Jenkins",
-                location: "Phoenix, AZ",
-              },
-              {
-                quote:
-                  "My application response rate doubled after using CoverSnap. 📈",
-                name: "Alicia Romero",
-                location: "Austin, TX",
-              },
-              {
-                quote: "Finally — a tool that writes like a real human. 🤖",
-                name: "Mark Fields",
-                location: "Chicago, IL",
-              },
-              {
-                quote:
-                  "Super clean, fast, and zero fluff. Exactly what I needed. ⚡️",
-                name: "Priya Mehta",
-                location: "San Francisco, CA",
-              },
-              {
-                quote: "I stopped dreading cover letters. That’s huge. 😌",
-                name: "Devon Lee",
-                location: "New York, NY",
-              },
-              {
-                quote:
-                  "Got the job after using AI Career Assistant once. Unbelievable! 🚀",
-                name: "Tina Alvarez",
-                location: "Miami, FL",
-              },
-              {
-                quote: "The tone and polish were spot on — felt like magic. ✍️",
-                name: "David Kim",
-                location: "Seattle, WA",
-              },
-              {
-                quote: "Love how fast and simple it is. Total no-brainer. 🙌",
-                name: "Sarah Chen",
-                location: "Denver, CO",
-              },
-            ].map(({ quote, name, location }, i) => (
-              <div
-                key={i}
-                className="bg-stone-50 border border-stone-200 rounded-xl shadow-sm p-6 flex flex-col justify-between"
-              >
-                <div className="text-yellow-400 text-sm mb-2">★★★★★</div>
-                <p className="text-stone-600 italic mb-4">“{quote}”</p>
-                <p className="text-sm text-stone-500">
-                  — {name}, <span className="not-italic">{location}</span>
-                </p>
-              </div>
-            ))}
-          </div>
-        </section>
+       
         <section
           id="pricing"
           className="bg-white/90 backdrop-blur-sm border-t border-white/20 py-24 px-4 text-center relative z-10"
