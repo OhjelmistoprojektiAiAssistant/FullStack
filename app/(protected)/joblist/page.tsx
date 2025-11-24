@@ -113,7 +113,7 @@ export default function JobPage() {
                 </svg>
                 <input
                   type="text"
-                  placeholder="Etsi työpaikkaa, yritystä tai alaa"
+                  placeholder="Look for a job, company, or field"
                   value={filters.title}
                   onChange={(e) =>
                     setFilters((prev) => ({ ...prev, title: e.target.value }))
@@ -146,7 +146,7 @@ export default function JobPage() {
                 </svg>
                 <input
                   type="text"
-                  placeholder="Sijainti"
+                  placeholder="Location"
                   value={filters.location}
                   onChange={(e) =>
                     setFilters((prev) => ({
@@ -167,7 +167,7 @@ export default function JobPage() {
                 }
                 className="bg-teal-600 hover:bg-teal-700 text-white font-semibold px-8 py-3 rounded-xl transition-colors duration-200 text-lg"
               >
-                Etsi
+                Find
               </button>
             </div>
           </div>

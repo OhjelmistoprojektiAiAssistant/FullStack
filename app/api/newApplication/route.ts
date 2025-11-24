@@ -258,28 +258,7 @@ Use a clean, professional tone:
 `.trim();
   }
   
-  // language instruction
-  let languageInstruction = "";
-
-  switch (language) {
-    case "fi":
-      languageInstruction = `
-Write the entire cover letter in natural Finnish.
-- Avoid literal word-for-word translations from English
-- Use clear, easy-to-understand language
-- You may use a neutral professional tone that works both with "sinä" and "te" readers; avoid slang
-`.trim();
-      break;
-
-    case "en":
-    default:
-      languageInstruction = `
-Write the entire cover letter in natural, fluent English.
-- Avoid awkward literal translations
-- Use clear, modern business language
-`.trim();
-      break;
-  }
+  
 
   // structure intructions
   const structureInstruction = `
@@ -304,7 +283,6 @@ Structure the cover letter like this:
   const styleInstructions = [
     lengthInstruction,
     toneInstruction,
-    languageInstruction,
     structureInstruction,
   ]
     .filter(Boolean)
