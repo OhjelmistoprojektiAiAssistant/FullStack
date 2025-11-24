@@ -65,7 +65,6 @@ export default function JobPage() {
       <Navbar />
 
       <main className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 px-0 relative overflow-hidden">
-        {/* Background FX */}
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute inset-0 bg-[linear-gradient(rgba(59,130,246,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.03)_1px,transparent_1px)] bg-[size:44px_44px]" />
           <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
@@ -73,7 +72,6 @@ export default function JobPage() {
           <div className="absolute top-1/2 left-3/4 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl animate-pulse delay-2000"></div>
         </div>
 
-        {/* Hero Section */}
         <section className="flex flex-col items-center justify-center text-center py-16 px-4 relative z-10">
           <div className="w-full max-w-4xl space-y-8">
             <div className="space-y-4">
@@ -95,7 +93,7 @@ export default function JobPage() {
               </div>
             </div>
 
-            {/* Search Section */}
+
             <div className="bg-white rounded-2xl shadow-2xl p-2 flex flex-col md:flex-row items-stretch gap-2 max-w-4xl mx-auto">
               <div className="flex-1 flex items-center px-4 py-3 gap-3">
                 <svg
@@ -173,7 +171,6 @@ export default function JobPage() {
           </div>
         </section>
 
-        {/* Job Listings Section */}
         <section className="py-8 px-4 relative z-10">
           <div className="w-full max-w-6xl mx-auto bg-white/95 backdrop-blur-sm shadow-2xl border border-white/20 rounded-2xl p-8 space-y-6">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">

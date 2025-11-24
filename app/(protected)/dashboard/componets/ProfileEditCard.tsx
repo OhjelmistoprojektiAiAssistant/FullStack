@@ -1,4 +1,3 @@
-//profile/components/ProfileEditCard
 "use client";
 
 import { useRouter } from "next/navigation";
@@ -30,7 +29,7 @@ export default function ProfileEditCard({
           Edit Profile
         </button>
       </div>
-      {/* Read-only view */}
+
       <div className="space-y-4">
         <div>
           <label className="text-sm text-gray-600">Experience</label>

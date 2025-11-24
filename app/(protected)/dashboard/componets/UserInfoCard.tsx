@@ -1,5 +1,3 @@
-//profile/components/UserInfoCard
-
 import { UserInfoCardProps } from "@/lib/types/profile";
 import LoadingSpinner from "../../../(public)/components/ui/LoadingSpinner";
 

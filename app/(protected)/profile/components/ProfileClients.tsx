@@ -99,17 +99,16 @@ const ProfileClients = () => {
                 throw new Error(json.error?.message || "Failed to save profile");
             }
 
-            alert("✅ Profile updated successfully!");
+            // Profile updated successfully, no alert needed
         } catch (err) {
             console.error("Error saving profile:", err);
-            alert("❌ Failed to save profile");
+            // Failed to save profile, no alert needed
         }
     };
 
     if (loading) return (
         <div className="text-center">
             <LoadingSpinner size={48} />
-            <p className="text-gray-600 mt-4">Loading your profile...</p>
         </div>
     );
 

@@ -24,8 +24,7 @@ const page = () => {
     setSubmitLoading(true);
 
     try {
-      // Handle form submission logic here
-      // send api request to create a new application
+
       const response = await fetch("/api/newApplication", {
         method: "POST",
         headers: {
@@ -44,11 +43,9 @@ const page = () => {
         setOutput(data.coverLetter);
       } else {
         console.error("Error creating application:", data);
-        // You might want to show an error message to the user here
       }
     } catch (error) {
       console.error("Network error:", error);
-      // Handle network errors
     } finally {
       setSubmitLoading(false);
     }

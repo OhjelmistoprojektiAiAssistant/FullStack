@@ -102,12 +102,10 @@ const DraftForm: React.FC = () => {
                     />
                 </div>
 
-                {/* Character Counter */}
                 <div className="text-right text-sm text-gray-500 mb-2">
                     {content.length} characters
                 </div>
 
-                {/* Content Textarea */}
                 <div className="mb-4">
                     <label htmlFor="draft-content" className="block text-sm font-medium text-gray-700 mb-2">
                         Draft Content
@@ -130,14 +128,12 @@ You can format and refine this content later with AI assistance."
                     />
                 </div>
 
-                {/* Error Message */}
                 {error && (
                     <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
                         {error}
                     </div>
                 )}
 
-                {/* Action Buttons */}
                 <div className="flex justify-between items-center">
                     <Button
                         variant="outline"
@@ -162,7 +158,6 @@ You can format and refine this content later with AI assistance."
                 </div>
             </div>
 
-            {/* Tips Section */}
             <div className="bg-blue-50 rounded-lg p-6">
                 <h3 className="text-lg font-medium text-blue-900 mb-3">
                     💡 Tips for Writing Your Draft

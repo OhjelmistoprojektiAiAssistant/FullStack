@@ -2,12 +2,11 @@
 import React from "react";
 import { Input } from "../../../(public)/components/ui/input";
 
-// This interface now accepts *extra fields* without error
 interface PersonalInfoProps {
     formData: {
         name: string;
         title: string;
-        [key: string]: any; // ✅ allows other fields (education, experience, etc.)
+        [key: string]: any;
     };
     handleChange: (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>

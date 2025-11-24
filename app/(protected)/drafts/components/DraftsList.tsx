@@ -82,7 +82,6 @@ const DraftsList: React.FC = () => {
 
     return (
         <div className="space-y-6">
-            {/* Header with New Draft Button */}
             <div className="flex justify-between items-center">
                 <div>
                     <h2 className="text-xl font-semibold text-gray-900">
@@ -98,7 +97,6 @@ const DraftsList: React.FC = () => {
                 </Button>
             </div>
 
-            {/* Drafts List */}
             {drafts.length === 0 ? (
                 <div className="bg-white rounded-lg shadow-sm p-12 text-center">
                     <div className="max-w-sm mx-auto">
@@ -129,7 +127,6 @@ const DraftsList: React.FC = () => {
                 </div>
             )}
 
-            {/* Refresh Button */}
             {drafts.length > 0 && (
                 <div className="text-center pt-4">
                     <Button variant="outline" onClick={fetchDrafts}>

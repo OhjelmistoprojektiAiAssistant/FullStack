@@ -1,5 +1,3 @@
-//profile/components/ProfileClient
-
 "use client";
 import { useEffect, useState } from "react";
 import UserInfoCard from "./UserInfoCard";
