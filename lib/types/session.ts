@@ -1,5 +1,3 @@
-import { User } from "@/app/generated/prisma";
-
 export interface SessionUser {
     userId: string | undefined;
     email: string | undefined;
@@ -7,6 +5,6 @@ export interface SessionUser {
 
 export interface AuthState {
     isAuthenticated: boolean;
-    user: User | null;
+    user: any | null;
     isLoading: boolean;
 }

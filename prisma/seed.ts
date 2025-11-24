@@ -1,4 +1,4 @@
-import { PrismaClient } from "../app/generated/prisma";
+import { PrismaClient } from "@prisma/client";
 import bcrypt from 'bcryptjs';
 
 // Let's initialize a sample user
@@ -14,7 +14,7 @@ async function main() {
         create: {
             email: '',
             passwordHash: passHash,
-            
+
         },
     });
     console.log('Seeded user:', { id: user.id, email: user.email });
