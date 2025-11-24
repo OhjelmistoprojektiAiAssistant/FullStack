@@ -24,7 +24,12 @@ const DraftsList: React.FC = () => {
             setLoading(true);
             setError(null);
 
-            const res = await fetch("/api/auth/drafts");
+            const res = await fetch("/api/drafts", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
             const data = await res.json();
 
             if (!res.ok) {

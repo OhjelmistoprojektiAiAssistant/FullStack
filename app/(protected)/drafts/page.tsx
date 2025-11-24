@@ -1,8 +1,9 @@
 import Navbar from '@/app/(public)/components/frontpage/NavBar';
-import React from 'react';
 import DraftsList from './components/DraftsList';
+import { set } from 'zod';
 
 const Page = () => {
+
   return (
     <>
       <Navbar />

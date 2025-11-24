@@ -125,6 +125,7 @@ export async function POST(request: Request) {
     jobDescription,
     length = "short",
     tone = "professional",
+    language = "en",  // "fi" for Finnish, "en" for English
   } = await request.json();
 
     // fetch user's strengths from Profile
@@ -150,55 +151,164 @@ export async function POST(request: Request) {
 
   // INSTRUCTIONS START
   let lengthInstruction = "";
+
   switch (length) {
-    case "short":
-      lengthInstruction =
-        "Keep the cover letter concise and punchy. Just 3-4 sentences. Skip fluff and be direct.";
-      break;
     case "minimal":
-      lengthInstruction =
-        "Write a minimalist, efficient letter with 2-3 sentences and no filler.";
+      lengthInstruction = `
+Write a very short cover letter:
+- 2–3 sentences total
+- No greeting or sign-off
+- Focus only on why you are a good fit for this role
+- Explicitly mention at least one strength and one relevant experience
+`.trim();
       break;
-    case "elaborate":
-      lengthInstruction =
-        "Write a detailed, persuasive letter emphasizing accomplishments and strengths and relevant experience.";
+
+    case "short":
+      lengthInstruction = `
+Write a short cover letter:
+- 3–4 sentences OR 1 short paragraph
+- Direct, concise, and professional
+- Explicitly use the candidate's strengths and at least one experience example
+- If relevant, briefly reference education in one sentence
+`.trim();
       break;
+
     case "standard":
-    default:
-      lengthInstruction =
-        "Write professional and well-crafted cover letter tailored to the job description and personal strengths.";
+      lengthInstruction = `
+Write a standard-length cover letter:
+- 2–3 short paragraphs
+- Around 150–200 words
+- Clearly connect strengths, experience, and education to the job requirements
+- Keep the flow smooth and easy to read
+`.trim();
       break;
+
+    case "elaborate":
+      lengthInstruction = `
+Write an elaborate, persuasive cover letter:
+- 3–4 well-developed paragraphs
+- Around 250–350 words
+- Highlight concrete achievements, strengths, and relevant experience
+- Integrate education where it supports credibility for the role
+`.trim();
+      break;
+
+    default:
+      lengthInstruction = `
+Write a standard-length cover letter with 2–3 short paragraphs (~150–200 words), clearly linking strengths, experience, and education to the role.
+`.trim();
   }
 
   // Tone-based instructions
-  let toneInstruction = "";
-  switch (tone) {
-    case "startup":
-      toneInstruction =
-        "Write a startup-oriented cover letter, at most 2–3 tight paragraphs. Use tech-savvy, Silicon Valley startup lingo. No address or placeholders at the top.";
+ let toneInstruction = "";
+
+ switch (tone) {
+   case "startup":
+     toneInstruction = `
+Use a modern, startup-friendly tone:
+- Casual but professional
+- Energetic, proactive wording
+- Avoid corporate clichés
+- Prefer simple, clear sentences
+`.trim();
+     break;
+
+   case "executive":
+     toneInstruction = `
+Use an executive-level tone:
+- Polished, confident, and strategic
+- Focus on leadership, ownership, and impact
+- Avoid overly casual language
+`.trim();
+     break;
+
+   case "creative":
+     toneInstruction = `
+Use a creative, personality-driven tone:
+- Expressive and warm
+- Small touches of storytelling are allowed
+- Maintain clarity and professionalism
+`.trim();
+     break;
+
+   case "technical":
+     toneInstruction = `
+Use a technical tone:
+- Emphasize hard skills, tools, and measurable results
+- Use clear, precise language
+- Mention concrete projects and technologies when relevant
+`.trim();
+     break;
+
+   case "funny":
+     toneInstruction = `
+Use a lightly humorous tone:
+- 1–2 short paragraphs max
+- Keep humor subtle, friendly, and professional
+- No sarcasm or risky jokes
+`.trim();
+     break;
+
+   case "professional":
+   default:
+     toneInstruction = `
+Use a clean, professional tone:
+- Polite and confident
+- Clear and concise wording
+`.trim();
+  }
+  
+  // language instruction
+  let languageInstruction = "";
+
+  switch (language) {
+    case "fi":
+      languageInstruction = `
+Write the entire cover letter in natural Finnish.
+- Avoid literal word-for-word translations from English
+- Use clear, easy-to-understand language
+- You may use a neutral professional tone that works both with "sinä" and "te" readers; avoid slang
+`.trim();
       break;
-    case "executive":
-      toneInstruction =
-        "Craft a polished, executive-leadership-oriented letter tailored for senior-level positions.";
-      break;
-    case "creative":
-      toneInstruction =
-        "Write a creative, personality-driven letter appropriate for design or media jobs.";
-      break;
-    case "technical":
-      toneInstruction =
-        "Write a technically focused letter highlighting hard skills, projects, and tools.";
-      break;
-    case "funny":
-      toneInstruction =
-        "Write a funny cover letter. 1–2 paragraphs at most. No address or placeholders at the top.";
-      break;
-    case "professional":
+
+    case "en":
     default:
+      languageInstruction = `
+Write the entire cover letter in natural, fluent English.
+- Avoid awkward literal translations
+- Use clear, modern business language
+`.trim();
       break;
   }
 
-  const styleInstructions = `${lengthInstruction} ${toneInstruction}`.trim();
+  // structure intructions
+  const structureInstruction = `
+Structure the cover letter like this:
+
+1) Hook:
+   - 1–2 sentences
+   - Connect yourself to the company or role (e.g. their mission, product, or requirements).
+
+2) Middle:
+   - 1–2 paragraphs
+   - Link the candidate's strengths, experience, and education directly to the job description.
+   - Include at least one concrete example from experience (project, responsibility, or result).
+
+3) Closing:
+   - 1 short sentence
+   - Show motivation and invite next steps (e.g. interview)
+   - Do NOT add a name or signature line; the app will handle that.
+`.trim();
+
+  
+  const styleInstructions = [
+    lengthInstruction,
+    toneInstruction,
+    languageInstruction,
+    structureInstruction,
+  ]
+    .filter(Boolean)
+    .join("\n\n");
 
   // derive the arg type from SDK
   type CreateArgs = Parameters<typeof openai.responses.create>[0];
@@ -211,20 +321,88 @@ export async function POST(request: Request) {
       content: [
         {
           type: "input_text",
-          text: `You are an expert cover letter writer. ${styleInstructions}\nReturn only the final cover letter text.`,
+          text: `
+You are an expert cover letter writer. Follow these rules:
+
+- Use only the provided information.
+- Do not invent employers, degrees, or skills.
+- Explicitly use the candidate's strengths, experience, and education in the letter.
+- Include at least one concrete example from their experience that connects to the job description.
+- Keep paragraphs short (2–4 sentences).
+- Respect tone, length, language, and structure requirements.
+- Avoid clichés and generic statements.
+${styleInstructions}
+        `.trim(),
         },
       ],
     },
+
+    {
+      role: "system",
+      content: [
+        {
+          type: "input_text",
+          text: `
+Your task is to generate the highest-quality personalized cover letter using user data and job description.
+        `.trim(),
+        },
+      ],
+    },
+
     {
       role: "user",
       content: [
         {
           type: "input_text",
-          text: `Job Description:\n\n${jobDescription}`,
+          text: `
+USER DATA (JSON):
+${JSON.stringify({
+  jobDescription,
+  profile: {
+    strengths: strengths || null,
+    experience: experience || null,
+    education: education || null,
+  },
+  options: { length, tone },
+})}
+        `.trim(),
+        },
+      ],
+    },
+
+    {
+      role: "developer",
+      content: [
+        {
+          type: "input_text",
+          text: `
+You MUST return ONLY valid JSON in the following exact structure:
+
+{
+  "coverLetter": "string",
+  "subjectLine": "string",
+  "keywordsUsed": ["string"],
+  "notesForUser": {
+    "personalizationHook": "string",
+    "optionalPS": "string"
+  },
+  "meta": {
+    "language": "string",
+    "targetRole": "string",
+    "approxWordCount": number
+  }
+}
+
+Do NOT write anything outside the JSON.
+Do NOT include markdown.
+Do NOT explain your reasoning.
+Return ONLY the JSON object.
+        `.trim(),
         },
       ],
     },
   ];
+
 
   // Add strengths if provided
   if (strengths) {
@@ -271,6 +449,32 @@ export async function POST(request: Request) {
     temperature: 0.7, // Adjust temperature for creativity
   });
 
-  const text = response.output_text ?? "";
-  return NextResponse.json({ success: true, coverLetter: text });
+  const raw = response.output_text ?? "";
+
+  let data: any;
+
+  try {
+    data = JSON.parse(raw);
+  } catch (err) {
+    const approxWordCount = raw.split(/\s+/).filter(Boolean).length;
+    data = {
+      coverLetter: raw,
+      subjectLine: "",
+      keywordsUsed: [],
+      notesForUser: {
+        personalizationHook: "",
+        optionalPS: "",
+      },
+      meta: {
+        language: "unknown",
+        targetRole: "",
+        approxWordCount,
+      },
+    };
+  }
+  
+  // save the draft to the local storage 
+
+  console.log("AI request options:", { length, tone, language });
+  return NextResponse.json({ success: true, ...data });
 }

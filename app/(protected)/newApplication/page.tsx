@@ -2,7 +2,8 @@
 
 import Navbar from "@/app/(public)/components/frontpage/NavBar";
 import { Button } from "@/app/(public)/components/ui/button";
-import { Copy } from "lucide-react";
+import { saveDraftToDatabase } from "@/lib/draftActions/actions";
+import { Copy, Save } from "lucide-react";
 import Head from "next/head";
 import Link from "next/link";
 import React, { useState } from "react";
@@ -14,7 +15,7 @@ const page = () => {
   const [output, setOutput] = useState("");
   const [loading, setLoading] = useState(false);
   const [cooldown, setCooldown] = useState(0);
-  const [copied, setCopied] = useState(false);
+  const [saved, setSaved] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,8 +28,8 @@ const page = () => {
       },
       body: JSON.stringify({
         jobDescription,
-        toneOption,
-        lengthOption,
+        length: lengthOption,
+        tone: toneOption,
       }),
     });
 
@@ -41,8 +42,16 @@ const page = () => {
     }
   };
 
-  function handleCopy(): void {
-    throw new Error("Function not implemented.");
+  const handleSave = async () => {
+    try { 
+      const result = await saveDraftToDatabase(output);
+      if (result.success) {
+        setSaved(true);
+        setTimeout(() => setSaved(false), 2000); // reset saved state after 2 seconds
+      }
+    } catch (error) {
+      console.error("Error saving draft:", error);
+    }
   }
 
   function handleReset(): void {
@@ -148,7 +157,7 @@ const page = () => {
                   value={jobDescription}
                   onChange={(e) => setJobDescription(e.target.value)}
                   placeholder="Paste the job description here"
-                  className="w-full h-[180px] text-base p-4 rounded-lg border border-stone-300 resize-none bg-white" 
+                  className="w-full h-[180px] text-base p-4 rounded-lg border border-stone-300 resize-none bg-white"
                 />
                 <p className="mt-2 text-sm text-stone-400">
                   Please provide a detailed description of the job you are
@@ -171,9 +180,12 @@ const page = () => {
                     value={toneOption}
                     onChange={(e) => setToneOption(e.target.value)}
                   >
-                    <option value="professional">Professional</option>
-                    <option value="casual">Casual</option>
-                    <option value="friendly">Friendly</option>
+                    <option value="professional">Startup</option>
+                    <option value="casual">Executive</option>
+                    <option value="friendly">Creative</option>
+                    <option value="friendly">Technical</option>
+                    <option value="friendly">Funny</option>
+                    <option value="friendly">Professional</option>
                   </select>
                 </div>
 
@@ -219,10 +231,11 @@ const page = () => {
                 {output && (
                   <button
                     type="button"
-                    onClick={handleCopy}
+                    onClick={handleSave}
                     className="absolute top-2 right-2 text-sm text-stone-500 hover:text-stone-700 flex items-center gap-1 cursor-pointer"
                   >
-                    <Copy className="w-4 h-4" /> {copied ? "Copied" : "Copy"}
+                    <Save className="w-4 h-4" />{" "}
+                    {saved ? "Saved" : "Save"}
                   </button>
                 )}
                 <p className={`text-stone-600 ${output ? "mt-8" : ""}`}>
@@ -240,7 +253,7 @@ const page = () => {
             </form>
           </div>
         </section>
-       
+
         <section
           id="pricing"
           className="bg-white/90 backdrop-blur-sm border-t border-white/20 py-24 px-4 text-center relative z-10"
