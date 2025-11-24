@@ -22,7 +22,7 @@ export function LoginForm({
     setError(null);
     try {
       await postJSON("/api/auth/login", { email, password });
-      router.push("/dashboard");
+      router.push("/joblist");
     } catch (err: any) {
       setError(err?.error?.message ?? "Login failed");
     }
