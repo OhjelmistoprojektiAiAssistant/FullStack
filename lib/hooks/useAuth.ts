@@ -20,26 +20,24 @@ export function useAuth() {
         user: null,
         isLoading: true
     });
+    const [mounted, setMounted] = useState(false);
     const router = useRouter();
 
     const checkSession = async () => {
         try {
             const response = await fetch("/api/auth/session", {
                 method: "GET",
-                credentials: "include", // important cor cookies
+                credentials: "include", // important for cookies
                 cache: "no-store" // always fetch fresh data
             });
 
             const data = await response.json();
 
-            if (data.success) {
-                setAuthState({
-                    isAuthenticated: data.isAuthenticated,
-                    user: data.user,
-                    isLoading: false
-                });
-            }
-            return authState;
+            setAuthState({
+                isAuthenticated: data.isAuthenticated || false,
+                user: data.user || null,
+                isLoading: false
+            });
         } catch (error) {
             console.error("Failed to check session", error);
             setAuthState({
@@ -71,11 +69,13 @@ export function useAuth() {
     };
 
     useEffect(() => {
+        setMounted(true);
         checkSession();
     }, []);
 
     return {
         ...authState,
+        isLoading: authState.isLoading || !mounted,
         logout,
         refreshSession: checkSession
     };
