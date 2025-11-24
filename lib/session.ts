@@ -1,12 +1,12 @@
 
 import { cookies } from "next/headers";
-import { getIronSession, SessionOptions} from "iron-session";
+import { getIronSession, SessionOptions } from "iron-session";
 import { SessionUser } from "./types/session";
 
 
 export const sessionOptions: SessionOptions = {
     cookieName: "career_ai_session",
-    password: process.env.SESSION_SECRET! as string,
+    password: process.env.SESSION_SECRET || "default-dev-secret-change-in-production",
     cookieOptions: {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
@@ -18,7 +18,7 @@ export const sessionOptions: SessionOptions = {
 // returns a session bound to the response we return
 export function getRouteSession(request: Request, response: Response) {
     return getIronSession<SessionUser>(request, response, sessionOptions);
-} 
+}
 
 // we use inside Server Components (app/...)
 // we dont have response here, so we create a dummy response thath wont be sent

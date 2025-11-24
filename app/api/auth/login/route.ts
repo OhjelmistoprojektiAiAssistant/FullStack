@@ -2,7 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { getRouteSession } from "@/lib/session";
 import bcrypt from "bcryptjs";
 import { NextResponse } from "next/server";
-import z, { success } from "zod";
+import z from "zod";
 
 const loginSchema = z.object({
     email: z.string().email(),
@@ -114,9 +114,18 @@ export async function POST(request: Request) {
         await session.save();
         return res;
     } catch (error) {
-        console.error("Login error:", error);
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        console.error("Login error:", errorMessage);
+        console.error("Full error:", error);
         return NextResponse.json(
-            { success: false, error: { code: "internal_error", message: "An internal error occurred" } },
+            {
+                success: false,
+                error: {
+                    code: "internal_error",
+                    message: "An internal error occurred",
+                    details: process.env.NODE_ENV === "development" ? errorMessage : undefined
+                }
+            },
             { status: 500 }
         );
     }
